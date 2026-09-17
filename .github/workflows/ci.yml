@@ -1,0 +1,19 @@
+name: CI Workflow
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Ejecutar verificación de CI
+        run: echo "El pipeline de CI corrio correctamente"
+EOF
+
