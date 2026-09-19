@@ -15,5 +15,5 @@ jobs:
 
       - name: Ejecutar verificación de CI
         run: echo "El pipeline de CI corrio correctamente"
-EOF
+
 
