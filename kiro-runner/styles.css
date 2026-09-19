@@ -1,0 +1,149 @@
+/* ─── Variables globales ─────────────────────────────────────── */
+:root {
+  --color-primario:   #7540b0;
+  --color-secundario: #c2a9df;
+  --color-fondo:      #0d0d1a;
+  --color-fondo-alt:  #1a1040;
+  --color-suelo:      #1e1b4b;
+  --color-texto:      #e0e0ff;
+  --color-acento:     #f472b6;
+  --color-cyan:       #67e8f9;
+  --color-blanco:     #ffffff;
+  --fuente-base:      'Roboto', sans-serif;
+  --radio-borde:      12px;
+}
+
+/* ─── Reset & Base ───────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--color-fondo);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-family: var(--fuente-base);
+  color: var(--color-texto);
+  overflow: hidden;
+  user-select: none;
+}
+
+/* ─── Título ─────────────────────────────────────────────────── */
+h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--color-secundario);
+  text-shadow: 0 0 16px var(--color-primario);
+  margin-bottom: 12px;
+}
+
+/* ─── HUD ────────────────────────────────────────────────────── */
+#hud {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  letter-spacing: 1px;
+}
+
+#hud span   { color: var(--color-secundario); }
+#hud strong { color: var(--color-blanco); font-size: 1.15rem; }
+
+/* ─── Contenedor del canvas ──────────────────────────────────── */
+#canvas-wrap {
+  position: relative;
+  border: 2px solid var(--color-primario);
+  border-radius: var(--radio-borde);
+  box-shadow:
+    0 0 40px color-mix(in srgb, var(--color-primario) 40%, transparent),
+    0 0 80px color-mix(in srgb, var(--color-primario) 20%, transparent);
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+  background: #111130;
+}
+
+/* ─── Overlay (inicio / game over) ──────────────────────────── */
+#overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: rgba(13, 13, 26, 0.8);
+  backdrop-filter: blur(4px);
+  border-radius: calc(var(--radio-borde) - 2px);
+  transition: opacity 0.25s;
+}
+
+#overlay.oculto {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#overlay h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-secundario);
+  text-shadow: 0 0 20px var(--color-primario);
+  letter-spacing: 2px;
+}
+
+#overlay p {
+  font-size: 1rem;
+  color: var(--color-secundario);
+  text-align: center;
+  line-height: 1.6;
+}
+
+.puntaje-final {
+  font-size: 1.4rem;
+  color: var(--color-blanco);
+  font-weight: 700;
+}
+
+.puntaje-final.oculto { display: none; }
+
+/* ─── Botón principal ────────────────────────────────────────── */
+#btn-jugar {
+  margin-top: 6px;
+  padding: 12px 36px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: var(--fuente-base);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, var(--color-primario), #4f46e5);
+  color: var(--color-blanco);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 0 20px color-mix(in srgb, var(--color-primario) 53%, transparent);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+#btn-jugar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 28px var(--color-primario);
+}
+
+#btn-jugar:active { transform: scale(0.97); }
+
+/* ─── Pista de controles ─────────────────────────────────────── */
+#pista {
+  margin-top: 10px;
+  font-size: 0.78rem;
+  color: color-mix(in srgb, var(--color-primario) 70%, var(--color-fondo));
+  letter-spacing: 1px;
+}

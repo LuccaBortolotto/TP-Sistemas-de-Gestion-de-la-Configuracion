@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "JSDoc Checker",
+      "trigger": "PostFileSave",
+      "matcher": "\\.js$",
+      "action": {
+        "type": "agent",
+        "prompt": "El usuario acaba de guardar un archivo JavaScript. Analiza el contenido del archivo guardado y revisa lo siguiente:\n\n1. **Funciones sin documentación JSDoc**: Detecta cualquier función (declarada con `function`, arrow functions asignadas a variables, métodos de objetos/clases) que no tenga un bloque `/** ... */` de JSDoc inmediatamente antes de su definición.\n\n2. **Errores evidentes**: Detecta problemas como:\n   - Sintaxis inválida o llamadas incorrectas\n   - Variables usadas sin declarar\n   - Lógica que no está envuelta en `try/catch`\n   - Mensajes de error en inglés (deben estar en español según las convenciones del proyecto)\n\nLee el archivo activo y reporta en el chat de forma clara y concisa:\n- Lista las funciones que les falta JSDoc, indicando el nombre de la función\n- Lista los errores encontrados\n- Si todo está correcto, confirma que el archivo cumple las convenciones\n\nSé directo y usa español en tu respuesta."
+      }
+    }
+  ]
+}

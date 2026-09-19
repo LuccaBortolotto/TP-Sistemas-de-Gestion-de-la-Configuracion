@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kiro Ghost Runner</title>
+
+  <!-- Tipografía Roboto -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <h1>👻 Kiro Ghost Runner</h1>
+
+  <!-- HUD -->
+  <div id="hud">
+    <div><span>PUNTOS </span><strong id="display-puntos">0</strong></div>
+    <div><span>MEJOR  </span><strong id="display-mejor">0</strong></div>
+    <div><span>NIVEL  </span><strong id="display-nivel">1</strong></div>
+  </div>
+
+  <!-- Canvas principal -->
+  <div id="canvas-wrap">
+    <canvas id="juego" width="800" height="240"></canvas>
+
+    <!-- Overlay de inicio / game over -->
+    <div id="overlay">
+      <h2 id="titulo-overlay">👻 KIRO RUNNER</h2>
+      <p id="mensaje-overlay">Esquiva los obstáculos saltando.<br>¡Sobrevive el mayor tiempo posible!</p>
+      <p id="puntaje-final" class="puntaje-final oculto"></p>
+      <button id="btn-jugar">JUGAR</button>
+    </div>
+  </div>
+
+  <p id="pista">ESPACIO / ↑ / TAP para saltar &nbsp;·&nbsp; Doble salto disponible</p>
+
+  <script src="script.js"></script>
+</body>
+</html>
