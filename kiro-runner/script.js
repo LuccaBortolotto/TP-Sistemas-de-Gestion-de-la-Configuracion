@@ -90,7 +90,15 @@ function actualizarCorazones() {
     if (!displayVidas) return;
     const corazones = displayVidas.querySelectorAll(".corazon");
     corazones.forEach((c, i) => {
-      c.textContent = i < vidas ? "❤️" : "🤍";
+      // Limpia cualquier emoji residual que pueda haber quedado en el HTML
+      c.textContent = "";
+
+      if (i < vidas) {
+        c.style.display = "inline-block";
+        c.style.visibility = "visible";
+      } else {
+        c.style.visibility = "hidden"; // Desaparece al perder la vida
+      }
     });
   } catch (error) {
     console.error("Error al actualizar los corazones:", error);
@@ -167,10 +175,13 @@ function mostrarGameOver() {
   try {
     enJuego = false;
     overlay.classList.remove("oculto");
-    tituloOverlay.textContent  = "💀 JUEGO TERMINADO";
-    const vidasPerdidas        = MAX_VIDAS - vidas;
-    mensajeOverlay.textContent = `Vidas perdidas: ${"❤️".repeat(vidasPerdidas)}${"🤍".repeat(vidas)}`;
-    puntajeFinal.textContent   = `Puntos: ${puntos}  ·  Mejor: ${mejorPuntos}`;
+    tituloOverlay.textContent = "💀 JUEGO TERMINADO";
+
+    const vidasPerdidas = MAX_VIDAS - vidas;
+    // Usa corazones blancos 🤍 en vez de rojos ❤️
+    mensajeOverlay.textContent = `Vidas perdidas: ${"🤍 ".repeat(vidasPerdidas)}`;
+
+    puntajeFinal.textContent = `Puntos: ${puntos}  ·  Mejor: ${mejorPuntos}`;
     puntajeFinal.classList.remove("oculto");
     btnJugar.textContent = "REINTENTAR";
   } catch (error) {

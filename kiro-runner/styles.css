@@ -171,3 +171,23 @@ canvas {
   color: color-mix(in srgb, var(--color-primario) 70%, var(--color-fondo));
   letter-spacing: 1px;
 }
+
+.corazon-pixel {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin: 0 3px;
+    background-color: #ffffff;
+    /* Forma básica pixelada usando clip-path o máscara pixel art */
+    clip-path: polygon(
+        20% 0%, 40% 0%, 50% 20%, 60% 0%, 80% 0%, 
+        100% 20%, 100% 50%, 50% 100%, 0% 50%, 0% 20%
+    );
+    image-rendering: pixelated;
+    transition: opacity 0.2s ease;
+}
+
+/* Ocultar corazón en vez de teñirlo de gris/rojo */
+.corazon-pixel.perdida {
+    visibility: hidden; /* o opacity: 0; */
+}
