@@ -187,10 +187,14 @@ function generarObstaculo() {
 function hayColision(obs) {
   try {
     const margen = 6;
+
+    const enSuelo = fantasmaY >= SUELO_Y - FANTASMA_ALTO - 1;
+    const flotacion = enSuelo ? Math.sin(anguloFlotacion) * 2 : 0;
+    const posYefectiva = fantasmaY + flotacion;
     const fx1 = FANTASMA_X + margen;
-    const fy1 = fantasmaY  + margen;
+    const fy1 = posYefectiva + margen;
     const fx2 = FANTASMA_X + FANTASMA_ANCHO - margen;
-    const fy2 = fantasmaY  + FANTASMA_ALTO  - margen;
+    const fy2 = posYefectiva + FANTASMA_ALTO  - margen;
     return fx1 < obs.x + obs.w && fx2 > obs.x && fy1 < obs.y + obs.h && fy2 > obs.y;
   } catch (error) {
     console.error("Error al comprobar colisión:", error);
