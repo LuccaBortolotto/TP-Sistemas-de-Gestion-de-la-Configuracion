@@ -18,7 +18,6 @@ const FANTASMA_ALTO   = 48;
 const GRAVEDAD        = 0.55;
 const FUERZA_SALTO    = -13;
 const MAX_SALTOS      = 2;
-const MAX_VIDAS       = 3;     // vidas máximas del fantasma
 
 /* ─── Referencias al DOM ──────────────────────────────────────── */
 const canvas        = document.getElementById("juego");
@@ -33,17 +32,14 @@ const btnJugar      = document.getElementById("btn-jugar");
 const displayPuntos = document.getElementById("display-puntos");
 const displayMejor  = document.getElementById("display-mejor");
 const displayNivel  = document.getElementById("display-nivel");
-const displayVidas  = document.getElementById("display-vidas");
 
 /* ─── Estado global ───────────────────────────────────────────── */
-let enJuego      = false;
-let muerto       = false;
-let puntos       = 0;
-let mejorPuntos  = 0;
-let nivel        = 1;
-let frameId      = null;
-let vidas        = MAX_VIDAS;
-let invulnerable = false;
+let enJuego     = false;
+let muerto      = false;
+let puntos      = 0;
+let mejorPuntos = 0;
+let nivel       = 1;
+let frameId     = null;
 
 let fantasmaY    = SUELO_Y - FANTASMA_ALTO;
 let fantasmaVY   = 0;
@@ -54,10 +50,10 @@ let temporizadorObs = 0;
 let intervaloObs    = 110;
 let velocidad       = 5;
 
-let particulas      = [];
-let trailFrames     = [];
+let particulas   = [];
+let trailFrames  = [];
 let anguloFlotacion = 0;
-let offsetSuelo     = 0;
+let offsetSuelo  = 0;
 
 /** Estrellas de fondo generadas una sola vez */
 const estrellas = Array.from({ length: 80 }, () => ({
@@ -70,10 +66,10 @@ const estrellas = Array.from({ length: 80 }, () => ({
 
 /** Plantillas de obstáculos disponibles */
 const TIPOS_OBSTACULO = [
-  { w: 22, h: 34, color: COLOR.acento,   tipo: "pico"                   },
-  { w: 18, h: 52, color: COLOR.acento,   tipo: "pico"                   },
-  { w: 38, h: 24, color: COLOR.cyan,     tipo: "roca"                   },
-  { w: 28, h: 28, color: COLOR.primario, tipo: "orbe", floatY: SUELO_Y - 80 },
+  { w: 22, h: 34, color: COLOR.acento,     tipo: "pico"   },
+  { w: 18, h: 52, color: COLOR.acento,     tipo: "pico"   },
+  { w: 38, h: 24, color: COLOR.cyan,       tipo: "roca"   },
+  { w: 28, h: 28, color: COLOR.primario,   tipo: "orbe",  floatY: SUELO_Y - 80 },
 ];
 
 /* ════════════════════════════════════════════════════════════════
@@ -81,6 +77,7 @@ const TIPOS_OBSTACULO = [
 ═══════════════════════════════════════════════════════════════ */
 
 /**
+<<<<<<< HEAD
  * Actualiza los corazones en el HUD según las vidas restantes.
  * Corazón lleno ❤️ = vida disponible · corazón vacío 🤍 = vida perdida.
  * @returns {void}
@@ -106,6 +103,8 @@ function actualizarCorazones() {
 }
 
 /**
+=======
+>>>>>>> parent of ed8fe47 (commit con cambio de funcionalidad, agrego 3 vidas al fantasma de kiro)
  * Reinicia todas las variables de estado para una nueva partida.
  * @returns {void}
  */
@@ -124,9 +123,6 @@ function reiniciar() {
     intervaloObs    = 110;
     offsetSuelo     = 0;
     anguloFlotacion = 0;
-    vidas           = MAX_VIDAS;
-    invulnerable    = false;
-    actualizarCorazones();
   } catch (error) {
     console.error("Error al reiniciar el juego:", error);
   }
@@ -168,13 +164,14 @@ function iniciarPartida() {
 }
 
 /**
- * Muestra la pantalla de game over con el puntaje y detalle de vidas perdidas.
+ * Muestra la pantalla de game over con el puntaje obtenido.
  * @returns {void}
  */
 function mostrarGameOver() {
   try {
     enJuego = false;
     overlay.classList.remove("oculto");
+<<<<<<< HEAD
     tituloOverlay.textContent = "💀 JUEGO TERMINADO";
 
     const vidasPerdidas = MAX_VIDAS - vidas;
@@ -182,55 +179,15 @@ function mostrarGameOver() {
     mensajeOverlay.textContent = `Vidas perdidas: ${"🤍 ".repeat(vidasPerdidas)}`;
 
     puntajeFinal.textContent = `Puntos: ${puntos}  ·  Mejor: ${mejorPuntos}`;
+=======
+    tituloOverlay.textContent   = "💀 JUEGO TERMINADO";
+    mensajeOverlay.textContent  = "";
+    puntajeFinal.textContent    = `Puntos: ${puntos}  ·  Mejor: ${mejorPuntos}`;
+>>>>>>> parent of ed8fe47 (commit con cambio de funcionalidad, agrego 3 vidas al fantasma de kiro)
     puntajeFinal.classList.remove("oculto");
     btnJugar.textContent = "REINTENTAR";
   } catch (error) {
     console.error("Error al mostrar la pantalla de game over:", error);
-  }
-}
-
-/**
- * Recoloca al fantasma en su posición inicial tras perder una vida.
- * Elimina obstáculos cercanos y activa la invulnerabilidad por 2 segundos.
- * @returns {void}
- */
-function respawn() {
-  try {
-    fantasmaY  = SUELO_Y - FANTASMA_ALTO;
-    fantasmaVY = 0;
-    saltosDisp = MAX_SALTOS;
-    // Quitar obstáculos cercanos para evitar colisión inmediata al reaparecer
-    obstaculos = obstaculos.filter(o => o.x > FANTASMA_X + 100);
-    muerto     = false;
-    invulnerable = true;
-    setTimeout(() => {
-      invulnerable = false;
-    }, 2000);
-  } catch (error) {
-    console.error("Error al hacer respawn del fantasma:", error);
-  }
-}
-
-/**
- * Descuenta una vida al colisionar con un obstáculo.
- * Si quedan vidas realiza respawn tras 800 ms; si no, muestra game over.
- * @returns {void}
- */
-function perderVida() {
-  try {
-    vidas--;
-    generarParticulasMuerte();
-    if (puntos > mejorPuntos) mejorPuntos = puntos;
-    actualizarCorazones();
-    if (vidas <= 0) {
-      muerto = true;
-      setTimeout(mostrarGameOver, 600);
-    } else {
-      muerto = true;
-      setTimeout(respawn, 800);
-    }
-  } catch (error) {
-    console.error("Error al perder una vida:", error);
   }
 }
 
@@ -262,13 +219,11 @@ function generarObstaculo() {
 
 /**
  * Comprueba colisión AABB entre el fantasma y un obstáculo con margen de tolerancia.
- * Retorna false directamente si el fantasma es invulnerable.
  * @param {{ x: number, y: number, w: number, h: number }} obs - Obstáculo a comprobar.
- * @returns {boolean} `true` si hay colisión efectiva.
+ * @returns {boolean} `true` si hay colisión.
  */
 function hayColision(obs) {
   try {
-    if (invulnerable) return false;
     const margen = 6;
     const fx1 = FANTASMA_X + margen;
     const fy1 = fantasmaY  + margen;
@@ -309,7 +264,7 @@ function generarParticulasSalto() {
 }
 
 /**
- * Emite una explosión de partículas al perder una vida.
+ * Emite una explosión de partículas al morir.
  * @returns {void}
  */
 function generarParticulasMuerte() {
@@ -351,8 +306,8 @@ function actualizar() {
 
     /* Puntaje y nivel */
     puntos++;
-    nivel        = 1 + Math.floor(puntos / 400);
-    velocidad    = 5 + (nivel - 1) * 0.8 + puntos * 0.001;
+    nivel      = 1 + Math.floor(puntos / 400);
+    velocidad  = 5 + (nivel - 1) * 0.8 + puntos * 0.001;
     intervaloObs = Math.max(55, 110 - nivel * 8);
 
     /* Física del fantasma */
@@ -382,7 +337,10 @@ function actualizar() {
         obs.y = (obs.floatY ?? SUELO_Y - 80) + Math.sin(obs.anguloFloat) * 12;
       }
       if (hayColision(obs)) {
-        perderVida();
+        muerto = true;
+        generarParticulasMuerte();
+        if (puntos > mejorPuntos) mejorPuntos = puntos;
+        setTimeout(mostrarGameOver, 600);
         return;
       }
     }
@@ -414,7 +372,6 @@ function actualizarHud() {
     displayPuntos.textContent = puntos;
     displayMejor.textContent  = mejorPuntos;
     displayNivel.textContent  = nivel;
-    actualizarCorazones();
   } catch (error) {
     console.error("Error al actualizar el HUD:", error);
   }
@@ -492,21 +449,16 @@ function dibujarSuelo() {
 
 /**
  * Dibuja el fantasma de Kiro en la posición indicada.
- * Cuando es invulnerable, parpadea alternando opacidad cada 120 ms.
- * @param {number} x      - Posición horizontal.
- * @param {number} y      - Posición vertical.
- * @param {number} alpha  - Opacidad base (0–1).
+ * @param {number} x     - Posición horizontal.
+ * @param {number} y     - Posición vertical.
+ * @param {number} alpha - Opacidad (0–1).
  * @param {number} escala - Factor de escala.
  * @returns {void}
  */
 function dibujarFantasma(x, y, alpha = 1, escala = 1) {
   try {
     ctx.save();
-    // Parpadeo durante invulnerabilidad: alterna entre 0.25 y 1 cada 120 ms
-    const alphaEfectivo = invulnerable
-      ? (Math.floor(Date.now() / 120) % 2 === 0 ? 0.25 : 1) * alpha
-      : alpha;
-    ctx.globalAlpha = alphaEfectivo;
+    ctx.globalAlpha = alpha;
     ctx.translate(x + FANTASMA_ANCHO / 2, y + FANTASMA_ALTO / 2);
     ctx.scale(escala, escala);
 
@@ -544,12 +496,12 @@ function dibujarFantasma(x, y, alpha = 1, escala = 1) {
     ctx.beginPath(); ctx.arc( hw * 0.35 + 1, ojosY + 1, 3, 0, Math.PI * 2); ctx.fill();
 
     /* Letra K de Kiro */
-    ctx.fillStyle    = "#e9d5ff";
-    ctx.font         = "bold 11px 'Roboto', sans-serif";
-    ctx.textAlign    = "center";
-    ctx.textBaseline = "middle";
-    ctx.shadowColor  = COLOR.secundario;
-    ctx.shadowBlur   = 8;
+    ctx.fillStyle     = "#e9d5ff";
+    ctx.font          = "bold 11px 'Roboto', sans-serif";
+    ctx.textAlign     = "center";
+    ctx.textBaseline  = "middle";
+    ctx.shadowColor   = COLOR.secundario;
+    ctx.shadowBlur    = 8;
     ctx.fillText("K", 0, hh * 0.28);
     ctx.shadowBlur = 0;
 
@@ -562,7 +514,7 @@ function dibujarFantasma(x, y, alpha = 1, escala = 1) {
 
 /**
  * Dibuja un obstáculo según su tipo (pico, roca u orbe).
- * @param {{ x: number, y: number, w: number, h: number, color: string, tipo: string }} obs
+ * @param {{ x: number, y: number, w: number, h: number, color: string, tipo: string }} obs - Obstáculo.
  * @returns {void}
  */
 function dibujarObstaculo(obs) {
@@ -584,9 +536,9 @@ function dibujarObstaculo(obs) {
       ctx.arc(cx, cy, r, 0, Math.PI * 2);
       ctx.fill();
 
-      ctx.strokeStyle = obs.color;
-      ctx.lineWidth   = 2;
-      ctx.globalAlpha = 0.5;
+      ctx.strokeStyle  = obs.color;
+      ctx.lineWidth    = 2;
+      ctx.globalAlpha  = 0.5;
       ctx.beginPath();
       ctx.arc(cx, cy, r + 5, 0, Math.PI * 2);
       ctx.stroke();
@@ -603,9 +555,9 @@ function dibujarObstaculo(obs) {
 
       ctx.fillStyle = "rgba(255,255,255,0.15)";
       ctx.beginPath();
-      ctx.moveTo(obs.x + obs.w / 2,    obs.y + 4);
-      ctx.lineTo(obs.x + obs.w * 0.65, obs.y + obs.h * 0.5);
-      ctx.lineTo(obs.x + obs.w * 0.35, obs.y + obs.h * 0.5);
+      ctx.moveTo(obs.x + obs.w / 2,       obs.y + 4);
+      ctx.lineTo(obs.x + obs.w * 0.65,    obs.y + obs.h * 0.5);
+      ctx.lineTo(obs.x + obs.w * 0.35,    obs.y + obs.h * 0.5);
       ctx.closePath();
       ctx.fill();
 
@@ -666,8 +618,8 @@ function dibujarLineasVelocidad() {
       const sy  = 20 + i * 30;
       const len = 30 + i * 10;
       ctx.beginPath();
-      ctx.moveTo(W * 0.3 - offsetSuelo % 80,       sy);
-      ctx.lineTo(W * 0.3 - offsetSuelo % 80 - len, sy);
+      ctx.moveTo(W * 0.3 - offsetSuelo % 80,        sy);
+      ctx.lineTo(W * 0.3 - offsetSuelo % 80 - len,  sy);
       ctx.stroke();
     }
     ctx.globalAlpha = 1;
@@ -696,7 +648,7 @@ function dibujar() {
     });
 
     /* Fantasma principal con flotación al estar en el suelo */
-    const enSuelo   = fantasmaY >= SUELO_Y - FANTASMA_ALTO - 1;
+    const enSuelo  = fantasmaY >= SUELO_Y - FANTASMA_ALTO - 1;
     const flotacion = enSuelo ? Math.sin(anguloFlotacion) * 2 : 0;
     dibujarFantasma(FANTASMA_X, fantasmaY + flotacion, 1, 1);
 

@@ -51,34 +51,10 @@ h1 {
   margin-bottom: 10px;
   font-size: 1rem;
   letter-spacing: 1px;
-  align-items: center;
 }
 
 #hud span   { color: var(--color-secundario); }
 #hud strong { color: var(--color-blanco); font-size: 1.15rem; }
-
-/* ─── Vidas (corazones) ──────────────────────────────────────── */
-#hud-vidas {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-#hud-vidas > span:first-child {
-  color: var(--color-secundario);
-  margin-right: 4px;
-}
-
-#display-vidas {
-  display: flex;
-  gap: 3px;
-}
-
-#display-vidas .corazon {
-  font-size: 1.2rem;
-  line-height: 1;
-  transition: opacity 0.2s;
-}
 
 /* ─── Contenedor del canvas ──────────────────────────────────── */
 #canvas-wrap {
