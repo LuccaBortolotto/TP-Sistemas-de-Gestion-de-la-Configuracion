@@ -77,34 +77,6 @@ const TIPOS_OBSTACULO = [
 ═══════════════════════════════════════════════════════════════ */
 
 /**
-<<<<<<< HEAD
- * Actualiza los corazones en el HUD según las vidas restantes.
- * Corazón lleno ❤️ = vida disponible · corazón vacío 🤍 = vida perdida.
- * @returns {void}
- */
-function actualizarCorazones() {
-  try {
-    if (!displayVidas) return;
-    const corazones = displayVidas.querySelectorAll(".corazon");
-    corazones.forEach((c, i) => {
-      // Limpia cualquier emoji residual que pueda haber quedado en el HTML
-      c.textContent = "";
-
-      if (i < vidas) {
-        c.style.display = "inline-block";
-        c.style.visibility = "visible";
-      } else {
-        c.style.visibility = "hidden"; // Desaparece al perder la vida
-      }
-    });
-  } catch (error) {
-    console.error("Error al actualizar los corazones:", error);
-  }
-}
-
-/**
-=======
->>>>>>> parent of ed8fe47 (commit con cambio de funcionalidad, agrego 3 vidas al fantasma de kiro)
  * Reinicia todas las variables de estado para una nueva partida.
  * @returns {void}
  */
@@ -171,19 +143,9 @@ function mostrarGameOver() {
   try {
     enJuego = false;
     overlay.classList.remove("oculto");
-<<<<<<< HEAD
-    tituloOverlay.textContent = "💀 JUEGO TERMINADO";
-
-    const vidasPerdidas = MAX_VIDAS - vidas;
-    // Usa corazones blancos 🤍 en vez de rojos ❤️
-    mensajeOverlay.textContent = `Vidas perdidas: ${"🤍 ".repeat(vidasPerdidas)}`;
-
-    puntajeFinal.textContent = `Puntos: ${puntos}  ·  Mejor: ${mejorPuntos}`;
-=======
     tituloOverlay.textContent   = "💀 JUEGO TERMINADO";
     mensajeOverlay.textContent  = "";
     puntajeFinal.textContent    = `Puntos: ${puntos}  ·  Mejor: ${mejorPuntos}`;
->>>>>>> parent of ed8fe47 (commit con cambio de funcionalidad, agrego 3 vidas al fantasma de kiro)
     puntajeFinal.classList.remove("oculto");
     btnJugar.textContent = "REINTENTAR";
   } catch (error) {
